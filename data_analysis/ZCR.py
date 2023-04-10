@@ -19,8 +19,10 @@ file_names = os.listdir(folder_path)
 speaker_1=[]
 speaker_2=[]
 mixed = []
-
+times=0
 start_time = time.time()
+
+fig, ax = plt.subplots()
 
 for filename in file_names:
     elapsed_time = time.time() - start_time
@@ -35,12 +37,28 @@ for filename in file_names:
     speaker_1.append(s1_ZCR)
     speaker_2.append(s2_ZCR)
     mixed.append(mix_clean_ZCR)
+    times = librosa.times_like(s1_ZCR)
 
-    if elapsed_time >= 30:
+    # librosa.display.specshow(librosa.amplitude_to_db(S, ref=np.max),
+    #                          y_axis='log', x_axis='time', ax=ax)
+    ax.plot(times, s1_ZCR.T, color='black')
+    ax.plot(times, s2_ZCR.T, color='green')
+    # ax.plot(times, mix_clean_ZCR.T, color='red')
+
+
+
+
+    # ax.plot(times, trump_cent.T, label='trumpet centroid', color='blue')
+
+
+    if elapsed_time >= 5:
         break
 
     # print(ZCR.shape)
     # break;
+
+ax.legend(loc='upper right')
+ax.set(title='log Power spectrogram')
 
 mixed = np.array(mixed)
 speaker_1 = np.array(speaker_1)
@@ -51,23 +69,49 @@ rs_speaker_1 = speaker_1.reshape(mn)
 rs_speaker_2 = speaker_2.reshape(mn)
 
 
-data = {'Mixed ZCR': rs_mixed,
-        'Speaker 2 ZCR': rs_speaker_1,
-        'Speaker 3 ZCR': rs_speaker_2}
+# plt.legend(visible=False)
 
-# Create a DataFrame from the data
-df = pd.DataFrame(data)
-
-# Create the violin plot
-sns.violinplot(data=df, inner='stick')
-
-# Set the title and axis labels
-plt.title('ZCR Comparison between Speakers 1 , 2 and mixed audio')
-plt.xlabel('Speaker')
-plt.ylabel('ZCR')
-
-# Show the plot
 plt.show()
+
+#this will plot the spectral centroid of both
+# sy, sr = librosa.load("s2.wav",duration=5.0)
+# sz, sri = librosa.load("s1.wav",duration=5.0)
+# bothy, bothsr = librosa.load("both.wav",duration=5.0)
+#
+# trump, tsr = librosa.load(librosa.ex('trumpet'),duration=5.0)
+# y_8k = librosa.resample(y, orig_sr=sr, target_sr=8000)
+# mfcc = librosa.feature.mfcc(y=sy, sr=sr)
+# cent = librosa.feature.spectral_centroid(y=sy, sr=sr)
+# centi = librosa.feature.spectral_centroid(y=sz, sr=sr)
+# bothy_cent= librosa.feature.spectral_centroid(y=bothy, sr=sr)
+# trump_cent= librosa.feature.spectral_centroid(y=trump, sr=tsr)
+# S, phase = librosa.magphase(librosa.stft(y=sy))
+# freqs, times, D = librosa.reassigned_spectrogram(y, fill_nan=True)
+# librosa.feature.spectral_centroid(S=np.abs(D), freq=freqs)
+# times = librosa.times_like(cent)
+
+
+
+
+#
+#
+# data = {'Mixed ZCR': rs_mixed,
+#         'Speaker 2 ZCR': rs_speaker_1,
+#         'Speaker 3 ZCR': rs_speaker_2}
+#
+# # Create a DataFrame from the data
+# df = pd.DataFrame(data)
+#
+# # Create the violin plot
+# sns.violinplot(data=df, inner='stick')
+#
+# # Set the title and axis labels
+# plt.title('ZCR Comparison between Speakers 1 , 2 and mixed audio')
+# plt.xlabel('Speaker')
+# plt.ylabel('ZCR')
+#
+# # Show the plot
+# plt.show()
 
 # df = pd.DataFrame(mixed, columns=['mixed'])
 # df.to_excel('output.xlsx', index=False)

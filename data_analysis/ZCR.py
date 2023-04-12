@@ -10,6 +10,13 @@ import pandas as pd
 
 
 
+def plot_ZCR(s1_ZCR, s2_ZCR, mix_clean_ZCR, times):
+    fig, ax = plt.subplots()
+    ax.plot(times, s1_ZCR.T, label="Speaker 1", color='black')
+    ax.plot(times, s2_ZCR.T, label="Speaker 2", color='green')
+    ax.plot(times, mix_clean_ZCR.T, label="Mixed", color='red')
+    ax.legend(loc='upper right')
+    ax.set(title='log Power spectrogram')
 
 
 rootfolder ="D:/Projects/DANet-For-Speech-Separation-master/data/Libri2mixSimply/"
@@ -22,7 +29,7 @@ mixed = []
 times=0
 start_time = time.time()
 
-fig, ax = plt.subplots()
+
 
 for filename in file_names:
     elapsed_time = time.time() - start_time
@@ -38,13 +45,12 @@ for filename in file_names:
     speaker_2.append(s2_ZCR)
     mixed.append(mix_clean_ZCR)
     times = librosa.times_like(s1_ZCR)
+    plot_ZCR(s1_ZCR, s2_ZCR, mix_clean_ZCR, times)
 
     # librosa.display.specshow(librosa.amplitude_to_db(S, ref=np.max),
     #                          y_axis='log', x_axis='time', ax=ax)
-    ax.plot(times, s1_ZCR.T, color='black')
-    ax.plot(times, s2_ZCR.T, color='green')
-    # ax.plot(times, mix_clean_ZCR.T, color='red')
-
+    #
+    # break
 
 
 
@@ -57,8 +63,7 @@ for filename in file_names:
     # print(ZCR.shape)
     # break;
 
-ax.legend(loc='upper right')
-ax.set(title='log Power spectrogram')
+
 
 mixed = np.array(mixed)
 speaker_1 = np.array(speaker_1)
@@ -71,7 +76,26 @@ rs_speaker_2 = speaker_2.reshape(mn)
 
 # plt.legend(visible=False)
 
-plt.show()
+# plt.show()
+
+
+import numpy as np
+# import matplotlib.pyplot as dlt
+#
+# # Generate random height and weight data for 100 individuals
+# # height = np.random.normal(170, 10, 100)
+# # weight = height * np.random.normal(0.01, 0.02, 100) + np.random.normal(70, 10, 100)
+#
+# # Create a scatter plot of height vs weight
+# plt.scatter(rs_speaker_1, rs_speaker_2)
+#
+# # Set the plot title and axis labels
+# dlt.title('Height vs Weight Scatter Plot')
+# dlt.xlabel('Height (cm)')
+# dlt.ylabel('Weight (kg)')
+#
+# # Show the plot
+# dlt.show()
 
 #this will plot the spectral centroid of both
 # sy, sr = librosa.load("s2.wav",duration=5.0)
